@@ -1,0 +1,29 @@
+name: Node
+
+on: [push]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛬
+        uses: actions/checkout@v4
+      - name: Setup Node ⚙️
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+      - name: Cache Dependencies ⌛️
+        uses: 'actions/cache@v3'
+        id: cache-node-modules
+        with:
+          path: 'node_modules'
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies 📥
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Build typescript 📦
+        run: npm run build
+      - name: Lint code 💅
+        run: npm run lint
+      - name: Run tests ✅
+        run: npm run test
