@@ -1,27 +1,25 @@
 version: "3.8"
 
 services:
-  my-service-production:
-    container_name: my-service-production
+  api:
     build:
       target: production
       context: .
       args:
-        - PORT=${PORT}
+        - APP_PORT=$APP_PORT
     ports:
-      - "${PORT}:${PORT}"
+      - "$APP_PORT:$APP_PORT"
 
-  my-service-dev:
-    container_name: my-service-dev
+  api-dev:
     restart: unless-stopped
     env_file: .env
     build:
       target: dev
       context: .
       args:
-        - PORT=${PORT}
+        - APP_PORT=$APP_PORT
     ports:
-      - "${PORT}:${PORT}"
+      - "$APP_PORT:$APP_PORT"
       - "9229:9229"
     volumes:
       - .:/project
