@@ -1,6 +1,10 @@
 FROM node:20-alpine3.18 AS base
 
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 ENV DIR /project
+
+RUN corepack enable
 WORKDIR $DIR
 ARG NPM_TOKEN
 # =================================
@@ -9,10 +13,9 @@ FROM base AS dev
 ENV NODE_ENV=development
 
 COPY package*.json $DIR
+COPY pnpm-lock.yml $DIR
 
-RUN echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ".npmrc" && \
-  npm i && \
-  rm -f .npmrc
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
 COPY tsconfig*.json $DIR
 COPY src $DIR/src
