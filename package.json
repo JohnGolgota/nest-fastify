@@ -36,7 +36,7 @@
     "build:clean": "rimraf dist; exit 0"
   },
   "dependencies": {
-    "@golevelup/ts-jest": "^0.4.0",
+    "@golevelup/ts-jest": "^0.6.1",
     "@nestjs/cli": "^10.3.0",
     "@nestjs/common": "^10.3.0",
     "@nestjs/config": "^3.1.1",
